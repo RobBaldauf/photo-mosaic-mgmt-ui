@@ -1,0 +1,57 @@
+.container-fluid {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.form-inline {
+  margin-block-end: 0;
+}
+
+.card {
+  margin-top: 20px !important;
+}
+.card-img-top {
+  object-fit: contain;
+  max-width: 100%;
+  width: auto;
+  height: 300px;
+}
+
+.custom-file-label::after {
+  left: 0;
+  right: auto;
+  border-left-width: 0;
+  border-right: inherit;
+}
+
+.form-control-range {
+  margin-top: 10px;
+}
+
+.light-label {
+  color: gray;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.sample-img {
+  object-fit: contain;
+  max-width: 100%;
+  width: auto;
+  height: 700px;
+}
+
+.small-space-left {
+  margin-left: 8px;
+}
+
+.small-space-top {
+  margin-top: 8px;
+}
+
+/*
+.creation-row{
+  margin-bottom: 5px;
+} */
