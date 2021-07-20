@@ -11,7 +11,7 @@ import {
   resetMosaic,
   deleteMosaic,
   postSegments,
-} from "./api.js";
+} from "../api/api.js";
 
 const c = React.createElement;
 
@@ -43,7 +43,6 @@ class Mosaic extends React.Component {
         segmentBlurMedium: -1,
         segmentBlurHigh: -1,
       },
-      apiKey: props.apiKey,
       alert: props.alert,
       refresh: props.refresh,
       addingImage: false,
@@ -94,7 +93,6 @@ class Mosaic extends React.Component {
   reset = (event) => {
     resetMosaic(
       this.state.id,
-      this.state.apiKey,
       () => {
         this.state.refresh();
         this.closeEditMosaicModal();
@@ -111,7 +109,6 @@ class Mosaic extends React.Component {
   delete = (event) => {
     deleteMosaic(
       this.state.id,
-      this.state.apiKey,
       () => {
         this.state.refresh();
         this.closeEditMosaicModal();
@@ -154,7 +151,6 @@ class Mosaic extends React.Component {
           this.state.id,
           this.state.segmentFiles,
           this.state.quickFill,
-          this.state.apiKey,
           () => {
             this.state.refresh();
             this.setState({

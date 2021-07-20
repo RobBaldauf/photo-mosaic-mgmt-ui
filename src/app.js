@@ -1,9 +1,7 @@
 "use strict";
 import Mosaic from "./components/mosaic.js";
 import Navbar from "./components/nav.js";
-import { getMosaics } from "./components/api.js";
-
-import { API_KEY } from "./config/config.js";
+import { getMosaics } from "./api/api.js";
 
 const c = React.createElement;
 
@@ -13,21 +11,14 @@ class App extends React.Component {
     super(props);
     this.state = {
       mosaics: [],
-      apiKey: API_KEY,
       alertText: "",
     };
   }
-
-  updateAPIKey = (event) => {
-    //Update the API Key state
-    this.setState({ apiKey: event.target.value });
-  };
 
   refresh = () => {
     //Refresh the displayed mosaics
     getMosaics(
       (data) => {
-        console.log("Successfully fetched mosaics!");
         this.setState({ mosaics: [] }, function () {
           this.setState({ mosaics: data.mosaic_list });
         });
@@ -47,17 +38,21 @@ class App extends React.Component {
   customAlert = () => {
     return this.state.alertText !== ""
       ? c(
-          ReactBootstrap.Alert,
-          {
-            dismissible: true,
-            variant: "danger",
-            onClose: () => {
-              this.setAlertText("");
-            },
+        ReactBootstrap.Alert,
+        {
+          dismissible: true,
+          variant: "danger",
+          onClose: () => {
+            this.setAlertText("");
           },
-          `${this.state.alertText}`
-        )
+        },
+        `${this.state.alertText}`
+      )
       : null;
+  };
+
+  componentDidMount() {
+    this.refresh();
   };
 
   render() {
@@ -67,8 +62,6 @@ class App extends React.Component {
       {},
       c(Navbar, {
         refresh: this.refresh,
-        apiKey: this.state.apiKey,
-        updateAPIKey: this.updateAPIKey,
         alert: this.setAlertText,
       }),
       this.customAlert(),
@@ -85,7 +78,6 @@ class App extends React.Component {
                 id: m.id,
                 idx: m.index,
                 key: m.id,
-                apiKey: this.state.apiKey,
                 refresh: this.refresh,
                 alert: this.setAlertText,
               });

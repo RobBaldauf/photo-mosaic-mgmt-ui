@@ -1,6 +1,5 @@
 "use strict";
-import { SpinnerButton } from "./utils.js";
-import { postMosaic } from "./api.js";
+import { postMosaic } from "../api/api.js";
 import MosaicCreationDialog from "./mosaic_creation_dialog.js";
 const c = React.createElement;
 
@@ -13,32 +12,10 @@ const Controls = (props) => {
       "div",
       { className: "col-auto" },
       c(
-        "div",
-        { className: "input-group" },
-        c(
-          "div",
-          { className: "input-group-prepend" },
-          c("div", { className: "input-group-text" }, "API-Key:")
-        ),
-        c("input", {
-          type: "password",
-          id: "apiKey",
-          className: "form-control",
-          value: props.apiKey,
-          onChange: props.updateAPIKey,
-        })
-      )
-    ),
-    c(
-      "div",
-      { className: "col-auto" },
-      c(
         ReactBootstrap.Button,
         {
           variant: "light",
-          onClick: props.refresh,
-          disabled: props.apiKey === "",
-        },
+          onClick: props.refresh        },
         "Refresh"
       )
     ),
@@ -66,12 +43,10 @@ class Navbar extends React.Component {
       segmentBlurLow: 2,
       segmentBlurMedium: 3,
       segmentBlurHigh: 4,
-      apiKey: props.apiKey,
       mosaicFileName: "",
       mosaicFile: null,
       mosaicCreationModalVisible: false,
       refresh: props.refresh,
-      updateAPIKey: props.updateAPIKey,
       alert: props.alert,
     };
   }
@@ -134,7 +109,6 @@ class Navbar extends React.Component {
       this.state.segmentBlurLow,
       this.state.segmentBlurMedium,
       this.state.segmentBlurHigh,
-      this.state.apiKey,
       () => {
         this.setState(
           {
@@ -165,13 +139,14 @@ class Navbar extends React.Component {
         { className: "form-inline" },
         c(Controls, {
           refresh: this.state.refresh,
-          apiKey: this.state.apiKey,
-          updateAPIKey: this.state.updateAPIKey,
-          numSegments: this.state.numSegments,
           mosaicFileName: this.state.mosaicFileName,
-          updateNumSegments: this.updateNumSegments,
           createMosaic: this.showMosaicCreationModal,
         })
+      ),
+      c(
+        "a",
+        { className: "navbar-brand navbar-right",},
+        "Photo Mosaic Management UI"
       ),
       c(
         ReactBootstrap.Modal,

@@ -11,6 +11,8 @@ import {
   postSegmentEndpoint,
 } from "../config/endpoints.js";
 
+import { API_KEY } from "../config/config.js"
+
 export const getMosaics = (success, error) => {
   //fetch a list of mosaics from the API
   fetch(getMosaicListEndpoint(), {
@@ -38,7 +40,6 @@ export const postMosaic = (
   segmentBlurLow,
   segmentBlurMedium,
   segmentBlurHigh,
-  apiKey,
   success,
   error
 ) => {
@@ -52,15 +53,20 @@ export const postMosaic = (
   formData.append("segment_blur_low", segmentBlurLow);
   formData.append("segment_blur_medium", segmentBlurMedium);
   formData.append("segment_blur_high", segmentBlurHigh);
-  fetch(postMosaicEndpoint(), {
+
+  var req = {
     method: "POST",
-    body: formData,
     withCredentials: true,
     headers: {
-      api_key: apiKey,
       accept: "application/json",
     },
-  })
+    body: formData
+  };
+  if (API_KEY !== "") {
+    req.headers.api_key = API_KEY
+  }
+
+  fetch(postMosaicEndpoint(), req)
     .then((response) => response.json())
     .then((result) => {
       success(result);
@@ -144,16 +150,18 @@ export const getMetadata = (mosaicId, success, error) => {
     });
 };
 
-export const resetMosaic = (mosaicId, apiKey, success, error) => {
-  fetch(resetMosaicEndpoint(mosaicId), {
-    // Reset the filled segments of a mosaic
+export const resetMosaic = (mosaicId, success, error) => {
+  var req = {
     method: "POST",
     withCredentials: true,
     headers: {
-      api_key: apiKey,
       accept: "application/json",
-    },
-  })
+    }
+  };
+  if (API_KEY !== "") {
+    req.headers.api_key = API_KEY
+  }
+  fetch(resetMosaicEndpoint(mosaicId), req)
     .then((res) => res.json())
     .then((data) => {
       success(data);
@@ -163,16 +171,19 @@ export const resetMosaic = (mosaicId, apiKey, success, error) => {
     });
 };
 
-export const deleteMosaic = (mosaicId, apiKey, success, error) => {
-  // delete a mosaic from the db
-  fetch(deleteMosaicEndpoint(mosaicId), {
+export const deleteMosaic = (mosaicId, success, error) => {
+  var req = {
     method: "DELETE",
     withCredentials: true,
     headers: {
-      api_key: apiKey,
       accept: "application/json",
-    },
-  })
+    }
+  };
+  if (API_KEY !== "") {
+    req.headers.api_key = API_KEY
+  }
+  // delete a mosaic from the db
+  fetch(deleteMosaicEndpoint(mosaicId), req)
     .then((res) => res.json())
     .then((data) => {
       success(data);
@@ -186,7 +197,6 @@ export const postSegments = (
   mosaicId,
   segmentFiles,
   quickFill,
-  apiKey,
   success,
   error
 ) => {
@@ -196,15 +206,19 @@ export const postSegments = (
     const formData = new FormData();
     formData.append("file", segmentFiles[i]);
     formData.append("quick_fill", quickFill);
-    fetch(postSegmentEndpoint(mosaicId), {
+    var req = {
       method: "POST",
       withCredentials: true,
       headers: {
-        api_key: apiKey,
         accept: "application/json",
       },
       body: formData,
-    })
+    };
+    if (API_KEY !== "") {
+      req.headers.api_key = API_KEY
+    }
+
+    fetch(postSegmentEndpoint(mosaicId), req)
       .then((response) => response.json())
       .then(() => {
         if (uploadedFiles == segmentFiles.length) {
