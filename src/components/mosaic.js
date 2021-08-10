@@ -50,6 +50,7 @@ class Mosaic extends React.Component {
       sampleFile: null,
       sampleImage: null,
       sampleSegmentId: "",
+      sampleIndex:-1,
       sampleModalVisible: false,
       editMosaicModalVisible: false,
       segmentFileName: "",
@@ -127,6 +128,7 @@ class Mosaic extends React.Component {
     postSample(
       this.state.sampleFile,
       this.state.id,
+      this.state.sampleIndex,
       (image, segmentId) => {
         this.setState({ sampleImage: image, sampleSegmentId: segmentId });
       },
@@ -139,6 +141,14 @@ class Mosaic extends React.Component {
       }
     );
   };
+
+  previousSample = () =>{
+    this.setState({ sampleIndex:this.state.sampleIndex-1 }, this.getSample);
+  }
+
+  nextSample = () =>{
+    this.setState({ sampleIndex:this.state.sampleIndex+1 }, this.getSample);
+  }
 
   fillSegments = (event) => {
     // Upload a list of images as mosaic segments to the API
@@ -290,10 +300,19 @@ class Mosaic extends React.Component {
             ReactBootstrap.Button,
             {
               variant: "dark",
-              onClick: this.getSample,
+              onClick: this.previousSample,
+              disabled: this.state.sampleFileName === "" || this.state.sampleIndex<1,
+            },
+            "Previous sample"
+          ),
+          c(
+            ReactBootstrap.Button,
+            {
+              variant: "dark",
+              onClick: this.nextSample,
               disabled: this.state.sampleFileName === "",
             },
-            "Get random sample"
+            "Next sample"
           )
         )
       ),

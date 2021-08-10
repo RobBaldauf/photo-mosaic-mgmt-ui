@@ -76,10 +76,11 @@ export const postMosaic = (
     });
 };
 
-export const postSample = (sampleFile, sampleMosaicId, success, error) => {
+export const postSample = (sampleFile, sampleMosaicId, sampleIndex, success, error) => {
   // Upload the selected image to the api and display the returned filtered version of it
   const formData = new FormData();
   formData.append("file", sampleFile);
+  formData.append("sample_index", sampleIndex);
   fetch(postSegmentSampleEndpoint(sampleMosaicId), {
     method: "POST",
     withCredentials: true,
