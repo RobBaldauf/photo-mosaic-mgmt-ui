@@ -137,7 +137,7 @@ export const getMetadata = (mosaicId, success, error) => {
         brightSegmentsLeft: m.bright_segments_left,
         numSegments: m.num_segments,
         mosaicBackgroundBrightness:
-          m.mosaic_config.mosaic_background_brightness,
+          m.mosaic_config.mosaic_bg_brightness,
         mosaicBlendValue: m.mosaic_config.mosaic_blend_value,
         segmentBlendValue: m.mosaic_config.segment_blend_value,
         segmentBlurLow: m.mosaic_config.segment_blur_low,
