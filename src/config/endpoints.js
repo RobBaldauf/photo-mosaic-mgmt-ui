@@ -47,6 +47,6 @@ export const postSegmentEndpoint = (id) => {
   return API_SERVER + "/mosaic/" + id + "/segment/";
 };
 
-export const postSegmentSampleEndpoint = (id) => {
-  return API_SERVER + "/mosaic/" + id + "/segment/sample";
+export const postSegmentSampleEndpoint = (id, sampleIndex) => {
+  return API_SERVER + "/mosaic/" + id + "/segment/sample/" + sampleIndex;
 };
