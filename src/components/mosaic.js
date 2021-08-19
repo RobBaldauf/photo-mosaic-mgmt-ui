@@ -35,6 +35,7 @@ class Mosaic extends React.Component {
         darkSegmentsLeft: -1,
         mediumSegmentsLeft: -1,
         brightSegmentsLeft: -1,
+        mosaicTitle: "",
         numSegments: -1,
         mosaicBackgroundBrightness: -1,
         mosaicBlendValue: -1,
@@ -50,7 +51,7 @@ class Mosaic extends React.Component {
       sampleFile: null,
       sampleImage: null,
       sampleSegmentId: "",
-      sampleIndex:-1,
+      sampleIndex: -1,
       sampleModalVisible: false,
       editMosaicModalVisible: false,
       segmentFileName: "",
@@ -68,7 +69,7 @@ class Mosaic extends React.Component {
       (err) => {
         this.state.alert(
           "Error while fetching mosaic image (Check connection to backend): " +
-            err
+          err
         );
       }
     );
@@ -85,7 +86,7 @@ class Mosaic extends React.Component {
       (err) => {
         this.state.alert(
           "Error while fetching mosaic metadata (Check connection to backend): " +
-            err
+          err
         );
       }
     );
@@ -135,19 +136,19 @@ class Mosaic extends React.Component {
       (err) => {
         this.state.alert(
           "Error while getting filter sample (Check connection to backend): " +
-            err
+          err
         );
         this.closeSampleModal();
       }
     );
   };
 
-  previousSample = () =>{
-    this.setState({ sampleIndex:this.state.sampleIndex-1 }, this.getSample);
+  previousSample = () => {
+    this.setState({ sampleIndex: this.state.sampleIndex - 1 }, this.getSample);
   }
 
-  nextSample = () =>{
-    this.setState({ sampleIndex:this.state.sampleIndex+1 }, this.getSample);
+  nextSample = () => {
+    this.setState({ sampleIndex: this.state.sampleIndex + 1 }, this.getSample);
   }
 
   fillSegments = (event) => {
@@ -170,7 +171,7 @@ class Mosaic extends React.Component {
           (err) => {
             this.state.alert(
               "Error while filling segments (Check connection to backend): " +
-                err
+              err
             );
             this.closeEditMosaicModal();
           }
@@ -243,6 +244,7 @@ class Mosaic extends React.Component {
         c(MosaicImage, { src: this.state.image }),
         c(MosaicBody, {
           id: this.state.id,
+          title: this.state.metadata.mosaicTitle,
           brightSegments: this.state.metadata.brightSegmentsLeft,
           mediumSegments: this.state.metadata.mediumSegmentsLeft,
           darkSegments: this.state.metadata.darkSegmentsLeft,
@@ -301,7 +303,7 @@ class Mosaic extends React.Component {
             {
               variant: "dark",
               onClick: this.previousSample,
-              disabled: this.state.sampleFileName === "" || this.state.sampleIndex<1,
+              disabled: this.state.sampleFileName === "" || this.state.sampleIndex < 1,
             },
             "Previous sample"
           ),
