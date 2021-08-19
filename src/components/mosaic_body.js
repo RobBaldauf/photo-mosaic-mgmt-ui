@@ -21,6 +21,7 @@ export const MosaicBody = (props) => {
       "ul",
       { className: "list-group list-group-flush" },
       c(MosaicBodyTextRow, { text: "Id:", value: props.id }),
+      c(MosaicBodyTextRow, { text: "Title:", value: props.title }),
       c(MosaicBodyTextRow, { text: "Active:", value: props.isActive }),
       c(MosaicBodyTextRow, { text: "Filled:", value: props.isFilled }),
       c(MosaicBodyTextRow, { text: "Original:", value: props.isOriginal }),

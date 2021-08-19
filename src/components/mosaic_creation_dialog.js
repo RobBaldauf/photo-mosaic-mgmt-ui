@@ -36,6 +36,17 @@ export const MosaicCreationDialog = (props) => {
     c(
       "div",
       { className: "form-row" },
+      c(InputLabelText, {
+        id: "mosaicTitle",
+        text: "Mosaic title",
+        value: props.mosaicTitle,
+        onChange: props.updateMosaicTitle,
+        extraClasses: "col-md-12",
+      })
+    ),
+    c(
+      "div",
+      { className: "form-row" },
       c(InputLabelRange, {
         id: "mosaicBlendRange",
         min: "0",

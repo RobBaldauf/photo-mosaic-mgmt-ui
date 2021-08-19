@@ -33,6 +33,7 @@ export const getMosaics = (success, error) => {
 
 export const postMosaic = (
   mosaicFile,
+  mosaicTitle,
   numSegments,
   mosaicBgBrightness,
   mosaicBlendValue,
@@ -46,6 +47,7 @@ export const postMosaic = (
   //POST the selected mosaicFile to the API and refresh the page on success
   const formData = new FormData();
   formData.append("file", mosaicFile);
+  formData.append("title", mosaicTitle);
   formData.append("num_segments", numSegments);
   formData.append("mosaic_bg_brightness", mosaicBgBrightness);
   formData.append("mosaic_blend_value", mosaicBlendValue);
@@ -135,6 +137,7 @@ export const getMetadata = (mosaicId, success, error) => {
         darkSegmentsLeft: m.dark_segments_left,
         mediumSegmentsLeft: m.medium_segments_left,
         brightSegmentsLeft: m.bright_segments_left,
+        mosaicTitle:m.mosaic_config.title,
         numSegments: m.num_segments,
         mosaicBackgroundBrightness:
           m.mosaic_config.mosaic_bg_brightness,

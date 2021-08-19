@@ -45,6 +45,7 @@ class Navbar extends React.Component {
       segmentBlurHigh: 4,
       mosaicFileName: "",
       mosaicFile: null,
+      mosaicTitle:"",
       mosaicCreationModalVisible: false,
       refresh: props.refresh,
       alert: props.alert,
@@ -57,6 +58,10 @@ class Navbar extends React.Component {
       mosaicFile: event.target.files[0],
       mosaicFileName: event.target.value,
     });
+  };
+
+  updateMosaicTitle = (event) => {
+    this.setState({ mosaicTitle: event.target.value });
   };
 
   updateNumSegments = (event) => {
@@ -102,6 +107,7 @@ class Navbar extends React.Component {
   createMosaic = () => {
     postMosaic(
       this.state.mosaicFile,
+      this.state.mosaicTitle,
       this.state.numSegments,
       this.state.mosaicBgBrightness,
       this.state.mosaicBlendValue,
@@ -163,6 +169,8 @@ class Navbar extends React.Component {
           ReactBootstrap.Modal.Body,
           {},
           c(MosaicCreationDialog, {
+            mosaicTitle:this.state.mosaicTitle,
+            updateMosaicTitle: this.updateMosaicTitle,
             numSegments: this.state.numSegments,
             updateNumSegments: this.updateNumSegments,
             mosaicFileName: this.state.mosaicFileName,
