@@ -26,7 +26,7 @@ export const MosaicBody = (props) => {
       c(MosaicBodyTextRow, { text: "Filled:", value: props.isFilled }),
       c(MosaicBodyTextRow, { text: "Original:", value: props.isOriginal }),
       c(MosaicBodyTextRow, {
-        text: "Segm. left: ",
+        text: "Seg. left: ",
         value:
           props.brightSegments +
           " (bright), " +
@@ -72,7 +72,7 @@ export const MosaicBody = (props) => {
             onClick: props.getSample,
             className: "small-space-left",
           },
-          "Get filter sample"
+          "Get Sample"
         )
       )
     )

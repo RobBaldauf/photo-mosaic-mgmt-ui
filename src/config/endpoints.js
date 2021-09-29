@@ -43,6 +43,14 @@ export const deleteMosaicEndpoint = (id) => {
   return API_SERVER + "/mosaic/" + id;
 };
 
+export const getSegmentList = (id) => {
+  return API_SERVER + "/mosaic/" + id + "/segment/list";
+};
+
+export const postResetSegment = (mosaicId, segmentId) => {
+  return API_SERVER + "/mosaic/" + mosaicId + "/segment/" + segmentId + "/reset";
+};
+
 export const postSegmentEndpoint = (id) => {
   return API_SERVER + "/mosaic/" + id + "/segment/";
 };
