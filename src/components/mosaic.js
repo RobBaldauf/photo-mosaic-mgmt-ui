@@ -3,7 +3,6 @@
 import SampleDialog from "./sample_dialog.js";
 import EditMosaicDialog from "./edit_mosaic_dialog.js";
 import { MosaicBody } from "./mosaic_body.js";
-import { SpinnerButton } from "./utils.js";
 import {
   getMetadata,
   postSample,
@@ -224,7 +223,7 @@ class Mosaic extends React.Component {
       this.state.id,
       this.state.selectedSegmentId,
       () => {
-        //this.state.refresh();
+        this.state.refresh();
       },
       (err) => {
         this.state.alert(
@@ -437,24 +436,6 @@ class Mosaic extends React.Component {
         c(
           ReactBootstrap.Modal.Footer,
           {},
-          // c(
-          //   ReactBootstrap.Button,
-          //   {
-          //     variant: "danger",
-          //     onClick: this.delete,
-          //     disabled: this.state.addingImage,
-          //   },
-          //   "Delete"
-          // ),
-          // c(
-          //   ReactBootstrap.Button,
-          //   {
-          //     variant: "danger",
-          //     onClick: this.reset,
-          //     disabled: this.state.addingImage,
-          //   },
-          //   "Reset"
-          // ),
           c(
             ReactBootstrap.Button,
             {
