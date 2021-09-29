@@ -11,8 +11,12 @@ import {
   resetMosaic,
   deleteMosaic,
   postSegments,
+  getSegments, 
+  resetSegment
 } from "../api/api.js";
 
+
+const BRIGHTNESS_LEVELS = { 0: "low", 1: "medium", 2: "high" }
 const c = React.createElement;
 
 const MosaicImage = (props) => {
@@ -37,6 +41,12 @@ class Mosaic extends React.Component {
         brightSegmentsLeft: -1,
         mosaicTitle: "",
         numSegments: -1,
+        numRows: -1,
+        numCols: -1,
+        spaceTop: -1,
+        spaceLeft: -1,
+        segmentWidth: -1,
+        segmentHeight: -1,
         mosaicBackgroundBrightness: -1,
         mosaicBlendValue: -1,
         segmentBlendValue: -1,
@@ -57,6 +67,11 @@ class Mosaic extends React.Component {
       segmentFileName: "",
       segmentFiles: [],
       quickFill: true,
+      segments: [],
+      selectedSegmentId: "",
+      selectedSegmentBrightness: "",
+      selectedSegmentFilled:"",
+      selectedSegmentFillable: ""
     };
   }
 
@@ -203,6 +218,25 @@ class Mosaic extends React.Component {
     });
   };
 
+  resetSegment= () => {
+    // reset the selected segment
+    resetSegment(
+      this.state.id,
+      this.state.selectedSegmentId,
+      () => {
+        //this.state.refresh();
+      },
+      (err) => {
+        this.state.alert(
+          "Error while resetting segment (Check connection to backend): " +
+          err
+        );
+        this.closeSampleModal();
+      }
+    );
+  
+  };
+
   showSampleModal = () => {
     this.setState({
       sampleModalVisible: true,
@@ -218,8 +252,48 @@ class Mosaic extends React.Component {
   showEditMosaicModal = () => {
     this.setState({
       editMosaicModalVisible: true,
+    }, () => {
+      getSegments(this.state.id,
+        (data) => {
+          this.setState({
+            segments: data,
+          });
+        },
+        (err) => {
+          this.state.alert(
+            "Error while filling segments (Check connection to backend): " +
+            err
+          );
+          this.closeEditMosaicModal();
+        });
+      $("#edit-img").areaSelectable({
+        x: this.state.metadata.numCols,
+        y: this.state.metadata.numRows,
+        width: (700 / (this.state.metadata.numRows * this.state.metadata.segmentHeight)) * this.state.metadata.numCols * this.state.metadata.segmentWidth,
+        height: 700,
+        onSelected: this.showSegmentDetails,
+        onDeselected: this.hideSegmentDetails,
+      })
     });
   };
+
+  showSegmentDetails = (id) => {
+    this.setState({
+      selectedSegmentId: this.state.segments[id - 1].id,
+      selectedSegmentBrightness: BRIGHTNESS_LEVELS[this.state.segments[id - 1].bri],
+      selectedSegmentFilled: this.state.segments[id - 1].filled === 1 ? "yes" : "no",
+      selectedSegmentFillable: this.state.segments[id - 1].fillable === 1 ? "yes" : "no"
+    });
+  }
+
+  hideSegmentDetails = (id) => {
+    this.setState({
+      selectedSegmentId: "",
+      selectedSegmentBrightness: "",
+      selectedSegmentFilled: "",
+      selectedSegmentFillable: ""
+    });
+  }
 
   closeEditMosaicModal = () => {
     this.setState({
@@ -273,6 +347,7 @@ class Mosaic extends React.Component {
         {
           show: this.state.sampleModalVisible,
           size: "lg",
+          onHide: this.closeSampleModal
         },
         c(
           ReactBootstrap.Modal.Header,
@@ -323,7 +398,8 @@ class Mosaic extends React.Component {
         ReactBootstrap.Modal,
         {
           show: this.state.editMosaicModalVisible,
-          size: "lg",
+          size: "xl",
+          onHide: this.closeEditMosaicModal
         },
         c(
           ReactBootstrap.Modal.Header,
@@ -338,29 +414,47 @@ class Mosaic extends React.Component {
             updateSegmentFile: this.updateSegmentFile,
             quickFill: this.state.quickFill,
             toggleQuickFill: this.toggleQuickFill,
+            mosaicImgSrc: this.state.image,
+            numRows: this.state.numRows,
+            numCols: this.state.numCols,
+            spaceTop: this.state.spaceTop,
+            spaceLeft: this.state.spaceLeft,
+            segmentWidth: this.state.segmentWidth,
+            segmentHeight: this.state.segmentHeight,
+            fillSegments: this.fillSegments,
+            deleteMosaic: this.delete,
+            resetMosaic: this.reset,
+            segmentFileName: this.state.segmentFileName,
+            addingImage: this.state.addingImage,
+            selectedSegmentId: this.state.selectedSegmentId,
+            selectedSegmentBrightness: this.state.selectedSegmentBrightness,
+            selectedSegmentFilled:this.state.selectedSegmentFilled,
+            selectedSegmentFillable: this.state.selectedSegmentFillable,
+            resetSegment: this.resetSegment
           })
         ),
+
         c(
           ReactBootstrap.Modal.Footer,
           {},
-          c(
-            ReactBootstrap.Button,
-            {
-              variant: "danger",
-              onClick: this.delete,
-              disabled: this.state.addingImage,
-            },
-            "Delete"
-          ),
-          c(
-            ReactBootstrap.Button,
-            {
-              variant: "danger",
-              onClick: this.reset,
-              disabled: this.state.addingImage,
-            },
-            "Reset"
-          ),
+          // c(
+          //   ReactBootstrap.Button,
+          //   {
+          //     variant: "danger",
+          //     onClick: this.delete,
+          //     disabled: this.state.addingImage,
+          //   },
+          //   "Delete"
+          // ),
+          // c(
+          //   ReactBootstrap.Button,
+          //   {
+          //     variant: "danger",
+          //     onClick: this.reset,
+          //     disabled: this.state.addingImage,
+          //   },
+          //   "Reset"
+          // ),
           c(
             ReactBootstrap.Button,
             {
@@ -369,14 +463,7 @@ class Mosaic extends React.Component {
               disabled: this.state.addingImage,
             },
             "Close"
-          ),
-          c(SpinnerButton, {
-            variant: "dark",
-            onClick: this.fillSegments,
-            disabled: this.state.segmentFileName === "",
-            text: "Fill segments",
-            showSpinner: this.state.addingImage,
-          })
+          )
         )
       )
     );

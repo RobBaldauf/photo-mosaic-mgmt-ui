@@ -9,6 +9,8 @@ import {
   resetMosaicEndpoint,
   deleteMosaicEndpoint,
   postSegmentEndpoint,
+  getSegmentList,
+  postResetSegment
 } from "../config/endpoints.js";
 
 import { API_KEY } from "../config/config.js"
@@ -137,8 +139,14 @@ export const getMetadata = (mosaicId, success, error) => {
         darkSegmentsLeft: m.dark_segments_left,
         mediumSegmentsLeft: m.medium_segments_left,
         brightSegmentsLeft: m.bright_segments_left,
-        mosaicTitle:m.mosaic_config.title,
+        mosaicTitle: m.mosaic_config.title,
         numSegments: m.num_segments,
+        numRows: m.n_rows,
+        numCols: m.n_cols,
+        spaceTop: m.space_top,
+        spaceLeft: m.space_left,
+        segmentWidth:m.segment_width,
+        segmentHeight:m.segment_height,
         mosaicBackgroundBrightness:
           m.mosaic_config.mosaic_bg_brightness,
         mosaicBlendValue: m.mosaic_config.mosaic_blend_value,
@@ -187,6 +195,53 @@ export const deleteMosaic = (mosaicId, success, error) => {
   }
   // delete a mosaic from the db
   fetch(deleteMosaicEndpoint(mosaicId), req)
+    .then((res) => res.json())
+    .then((data) => {
+      success(data);
+    })
+    .catch((err) => {
+      error(err);
+    });
+};
+
+export const getSegments = (mosaicId, success, error) => {
+  var req = {
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      accept: "application/json",
+    }
+  }
+  if (API_KEY !== "") {
+    req.headers.api_key = API_KEY
+  }
+  //fetch a list of segments from the API
+  fetch(getSegmentList(mosaicId), req)
+    .then((res) => res.json())
+    .then((data) => {
+      var segments={};
+      data.segment_list.forEach(seg=>{
+        segments[seg.idx]=seg;
+      })
+      success(segments);
+    })
+    .catch((err) => {
+      error(err);
+    });
+};
+
+export const resetSegment = (mosaicId, segmentId, success, error) => {
+  var req = {
+    method: "POST",
+    withCredentials: true,
+    headers: {
+      accept: "application/json",
+    }
+  };
+  if (API_KEY !== "") {
+    req.headers.api_key = API_KEY
+  }
+  fetch(postResetSegment(mosaicId, segmentId), req)
     .then((res) => res.json())
     .then((data) => {
       success(data);

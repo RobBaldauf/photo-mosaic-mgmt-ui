@@ -9,6 +9,7 @@ export const SpinnerButton = (props) => {
       variant: props.variant,
       disabled: props.disabled || props.showSpinner,
       onClick: props.onClick,
+      className:"float-right"
     },
     `${props.text}`,
     c("span", {

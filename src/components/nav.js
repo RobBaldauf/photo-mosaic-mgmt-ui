@@ -159,6 +159,7 @@ class Navbar extends React.Component {
         {
           show: this.state.mosaicCreationModalVisible,
           size: "lg",
+          onHide: this.closeMosaicCreationModal
         },
         c(
           ReactBootstrap.Modal.Header,

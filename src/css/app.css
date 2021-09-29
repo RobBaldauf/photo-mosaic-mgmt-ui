@@ -37,10 +37,20 @@
 }
 
 .sample-img {
-  object-fit: contain;
+  /*object-fit: contain;*/
   max-width: 100%;
   width: auto;
   height: 700px;
+}
+
+.edit-img-div{
+  background-color: #ffffff; /* Used if the image is unavailable */
+  height: 700px; /* You must set a specified height */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: contain; 
+  width: auto;
+  max-width: 100%;
 }
 
 .small-space-left {
@@ -49,6 +59,10 @@
 
 .small-space-top {
   margin-top: 8px;
+}
+
+.large-space-top {
+  margin-top: 80px;
 }
 
 /*

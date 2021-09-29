@@ -72,7 +72,7 @@ export const MosaicBody = (props) => {
             onClick: props.getSample,
             className: "small-space-left",
           },
-          "Get filter sample"
+          "Get Sample"
         )
       )
     )
