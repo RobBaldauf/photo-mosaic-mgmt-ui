@@ -11,7 +11,8 @@ import {
   deleteMosaic,
   postSegments,
   getSegments, 
-  resetSegment
+  resetSegment,
+  updateMosaicStates
 } from "../api/api.js";
 
 
@@ -32,9 +33,9 @@ class Mosaic extends React.Component {
       idx: props.idx,
       image: null,
       metadata: {
-        active: "",
-        filled: "",
-        original: "",
+        active: false,
+        filled: false,
+        original: false,
         darkSegmentsLeft: -1,
         mediumSegmentsLeft: -1,
         brightSegmentsLeft: -1,
@@ -217,6 +218,54 @@ class Mosaic extends React.Component {
     });
   };
 
+  toggleActive = (event) => {
+    //Update the active state
+    var metadata=this.state.metadata
+    metadata.active=!metadata.active
+    this.setState({
+      metadata: metadata,
+    });
+  };
+
+  toggleFilled = (event) => {
+    //Update the filled state
+    var metadata=this.state.metadata
+    metadata.filled=!metadata.filled
+    this.setState({
+      metadata: metadata,
+    });
+  };
+
+  toggleOriginal = (event) => {
+    //Update the original state
+    var metadata=this.state.metadata
+    metadata.original=!metadata.original
+    this.setState({
+      metadata: metadata,
+    });
+  };
+
+  updateMosaicStates=()=>{
+    // reset the selected segment
+    updateMosaicStates(
+      this.state.id,
+      this.state.metadata.active,
+      this.state.metadata.filled,
+      this.state.metadata.original,
+      () => {
+        this.state.refresh();
+      },
+      (err) => {
+        this.state.alert(
+          "Error while updating mosaic states (Check connection to backend): " +
+          err
+        );
+        this.closeEditMosaicModal;
+      }
+    );
+  }
+
+
   resetSegment= () => {
     // reset the selected segment
     resetSegment(
@@ -233,7 +282,6 @@ class Mosaic extends React.Component {
         this.closeSampleModal();
       }
     );
-  
   };
 
   showSampleModal = () => {
@@ -429,7 +477,14 @@ class Mosaic extends React.Component {
             selectedSegmentBrightness: this.state.selectedSegmentBrightness,
             selectedSegmentFilled:this.state.selectedSegmentFilled,
             selectedSegmentFillable: this.state.selectedSegmentFillable,
-            resetSegment: this.resetSegment
+            resetSegment: this.resetSegment,
+            active: this.state.metadata.active,
+            setActive:this.toggleActive,
+            filled: this.state.metadata.filled,
+            setFilled:this.toggleFilled,
+            original: this.state.metadata.original,
+            setOriginal:this.toggleOriginal,
+            updateMosaicStates:this.updateMosaicStates
           })
         ),
 

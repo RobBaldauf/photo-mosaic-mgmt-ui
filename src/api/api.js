@@ -10,7 +10,8 @@ import {
   deleteMosaicEndpoint,
   postSegmentEndpoint,
   getSegmentList,
-  postResetSegment
+  postResetSegment,
+  postUpdateMosaicStates
 } from "../config/endpoints.js";
 
 import { API_KEY } from "../config/config.js"
@@ -242,6 +243,32 @@ export const resetSegment = (mosaicId, segmentId, success, error) => {
     req.headers.api_key = API_KEY
   }
   fetch(postResetSegment(mosaicId, segmentId), req)
+    .then((res) => res.json())
+    .then((data) => {
+      success(data);
+    })
+    .catch((err) => {
+      error(err);
+    });
+};
+
+export const updateMosaicStates = (mosaicId, active, filled, original, success, error) => {
+  const formData = new FormData();
+  formData.append("active", active);
+  formData.append("filled", filled);
+  formData.append("original", original);
+  var req = {
+    method: "POST",
+    withCredentials: true,
+    headers: {
+      accept: "application/json",
+    },
+    body: formData,
+  };
+  if (API_KEY !== "") {
+    req.headers.api_key = API_KEY
+  }
+  fetch(postUpdateMosaicStates(mosaicId), req)
     .then((res) => res.json())
     .then((data) => {
       success(data);

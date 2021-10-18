@@ -106,10 +106,43 @@ export const EditMosaicDialog = (props) => {
             "This will impact the entire mosaic permanently!"
           ),
           c(
+            ReactBootstrap.Form.Switch,
+            {
+              id:"switch-active",
+              type:"switch",
+              label:"Active",
+              className: "small-space-top",
+              checked: props.active,
+              onClick: props.setActive
+            },
+          ),
+          c(
+            ReactBootstrap.Form.Switch,
+            {
+              id:"switch-filled",
+              type:"switch",
+              label:"Filled",
+              className: "",
+              checked: props.filled,
+              onClick: props.setFilled
+            },
+          ),
+          c(
+            ReactBootstrap.Form.Switch,
+            {
+              id:"switch-original",
+              type:"switch",
+              label:"Original",
+              className: "",
+              checked: props.original,
+              onClick: props.setOriginal
+            },
+          ),
+          c(
             ReactBootstrap.Button,
             {
               variant: "danger",
-              className: "float-right small-space-left",
+              className: "float-right small-space-left small-space-top",
               onClick: props.resetMosaic,
               disabled: props.addingImage,
             },
@@ -119,11 +152,21 @@ export const EditMosaicDialog = (props) => {
             ReactBootstrap.Button,
             {
               variant: "danger",
-              className: "float-right small-space-left",
+              className: "float-right small-space-left small-space-top",
               onClick: props.deleteMosaic,
               disabled: props.addingImage,
             },
             "Delete Mosaic"
+          ),
+          c(
+            ReactBootstrap.Button,
+            {
+              variant: "danger",
+              className: "float-right small-space-left small-space-top",
+              onClick: props.updateMosaicStates,
+              disabled: props.addingImage,
+            },
+            "Update State"
           ),
         ),
       )
